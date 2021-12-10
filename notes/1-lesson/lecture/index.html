@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Blockchain Design Patterns</title>
+    <title>Design Patterns for Blockchain</title>
 
     <meta name="author" content="Dhruvin Parikh">
 
@@ -85,9 +85,9 @@
 
 <section data-markdown><script type="text/template">
 
-## BCDV 1011 - Smart Contracts Development Essentials
+## BCDV 1011 - Design Patterns for Blockchain
 
-### Lesson 1
+### Lesson 1 - Common Patterns
 
 *Dhruvin Parikh, December 2021*
 
@@ -103,301 +103,470 @@
 <section data-markdown><script type="text/template">
 
 ## Class Plan
-* Smart contracts
-* Ethereum
-* EVM
-* Use cases
+* Authorization
+* Control
+* Maintenance
+* Security
 </script></section>
 
 <section data-markdown><script type="text/template">
 
-## Distributed Network Benefits
+## Authorization
 
-* Pseudonymous
-* Democratic
-* Immutable
-* Uncensorable
-* Distributed
-
-</script></section>
-
-<section data-markdown><script type="text/template">
-
-## Smart contracts
-
-* Computer programs
-* Created by transactions
-* Have their own ethereum addresses
-* Called "autonomous agents"
-  * After you send them to the blockchain, they exist forever (unless they self destruct)
-  * Anyone can send transactions to them to trigger functionality
+* Access restriction
+* Multiple authorization
+* Ownership
+* Roles
 
 </script></section>
 
 <section data-markdown><script type="text/template">
 
-## Ethereum
+## Access restriction
 
-* Ethereum is a decentralized platform designed to run smart contracts
-  * Distributed computer to execute code
-  * Account-based blockchain
-  * Transactions == state transaction function
-* Ethereum has a native asset called ether
-  * Basis of value in the Ethereum ecosystem
-
-</script></section>
-
-<section data-markdown><script type="text/template">
-
-  ## Address
-    
-  - Ethereum addresses are 20 bytes long
-    
-  </script></section>
-  
-  <section data-markdown><script type="text/template">
-  
-  ## Types of Ethereum accounts
-    
-  * Externally Owned Accounts (EOA)
-    * Normal public/private key-pair accounts (previous courses?)
-  * Contracts
-    * Do not have key-pairs
-    * Have "code" written by contract creators
-    * No ability to initiate transactions: can only respond to external events
-  </script></section>
-  
-  
-  <section data-markdown><script type="text/template">
-  
-  ## Externally Owned Accounts (EOA)
-  
-  <img src="eoa.png" width=400>
-  
-  </script></section>
-  
-  <section data-markdown><script type="text/template">
-  
-  ## Contract Accounts
-    
-  <img src="ca.png" width=400>
-      
-  </script></section>
-
-
-
-<section data-markdown><script type="text/template">
-
-## Smart contract addresses
-
-* A contract's address is the hash of the creator's address and the nonce of the transaction that created it (RLP encoded)
-  * So, contracts do not have private keys
-* Contracts *do* have nonces
-  * Incremented whenever they deploy children contracts (so children contracts have unique addresses)
-
-</script></section>
-
-<section data-markdown><script type="text/template">
-
-  ## Smart contracts Redefining
-  
-  * Smart Contracts in Ethereum are like autonomous agents that live inside of the Ethereum network
-    * React to external world when "poked" by transactions (which call specific functions)
-    * Have direct control over:
-      * internal ether balance
-      * internal contract state
-  
-  </script></section>
-
-  <section data-markdown><script type="text/template">
-
-  ## Smart contracts Purpose
-  
-* Store and maintain data
-  * Data represents something useful to users or other contracts
-  * Ex: a token currency or organization’s membership
-* Manage contract or relationship between untrusting users
-  * Ex: financial contracts, insurance
-* Provide functions to other contracts
-  * Serving as a software library
-* Complex Authentication
-  
-  
-  </script></section>
-
-<section data-markdown><script type="text/template">
-
-  ## Ethereum
-  
-  * Ethereum is a “distributed computer”
-  * Ethereum’s distributed consensus protocol is Proof-of-Work
-  * Network consensus removes the need for Trusted Third Party
-  * Secure Peer-to-Peer agreements that live on the blockchain forever
-
-</script></section>
-
-<section data-markdown><script type="text/template">
-  
-  ## Ethereum Virtual Machine
-  
-  <img src="EVM_architecture.png" width=600>
-  
-  </script></section>
-
-  <section data-markdown><script type="text/template">
-  
-  ## EVM 
-  
-  * Gas and Fees
-  * Accounts
-  * Transactions
-  * Storage, memory and stack
-  * Instruction Sets
-  * Message Calls
-  * Delegate/callcode & libraries
-  * Logs
-  * Create
-  * Deactivate and self-destruct 
-  </script></section>
-
-<section data-markdown><script type="text/template">
-
-  ## Use cases 
-  
-  * ERC Tokens
-  * DNS e.g. ENS
-  * DeFi
-  * Predictions Markets
-  * DAO
-  * Marketplaces
-  </script></section>
-
-<section data-markdown><script type="text/template">
-
-## Solidity
-
-* A programming language, like C++ or Python or Javascript
-* But designed specially for smart contracts
-* Compiles to a special machine called the Ethereum Virtual Machine (EVM) 
-
-</script></section>
-
-
-
-<section data-markdown><script type="text/template">
-
-<img src="Solidity-Compilation.png" style="width:500px;background-color: white" />
-
-</script></section>
-
-
-
-<section data-markdown><script type="text/template">
-
-## Structure
+* Limit what account can do an action
+* Can use a modifier
 
 ```
-    // SPDX-License-Identifier: MIT
-    pragma solidity ^0.7.1;
-    contract MyContractName {
-        // code goes here
-    }
-```
-
-* `pragma` line: What version of solidity you want
-  * We'll leave this out of examples, but you should always have it in your code
-  * Use at least `0.7.1`: This course does not cover security issues of earlier versions
-* `contract`: Everything inside the curly braces is your contract
-
-</script></section>
-
-
-
-<section data-markdown><script type="text/template">
-
-  ## Primitive types
-  
-  * **uintX**: `X` is the number of bits: `uint256`, `uint32`
-  * **intX**: Same as `uintX` except signed (negatives allowed): `int256`, `int64`
-  * **bytesX**: Fixed size collection of bytes: `bytes32`
-  * **address**: An Ethereum address (20 bytes)
-  * **bool**: Boolean: `true` or `false`
-  * **string**: Dynamic-size collection of characters
-  * **bytes**: Dynamic-size collection of bytes
-  
-</script></section>
-
-
-<section data-markdown><script type="text/template">
-
-## Math Operations
-
-- Arithmetic Operators - +,-,\*,/,%, **
-* Incremental Operators - ++, --
-* Bitwise Operators - | , ~ , >> , <<
-* Logical Operators - !, &&, ||, ==, !=
-
-</script></section>
-  
-  
-<section data-markdown><script type="text/template">
-
-## Example
-
-```
-contract operators {
-  // Arithmetic Operators
-  // +,-,*,/, %, **
-  // Incremental Operators
-  // a++, a--, a+=1, a=a+1,++a,--a;
-  uint a=10;
-  a= a++; //here, output will be 10, because the value is first       
-         // returned and then then increment is done
-  a=++a;
-  //Logical Operators
-  // !, &&, ||, ==, !=
-  isOwner = true && false;
-  uint orValue= 0x02 | 0x01; // output would be 0x03
-
-  function Operators() {
-    // Initialize state variables here
+  modifier restriction(bool _condition) {
+    require(_condition);
+    _;
   }
-}
+  
+  function transferOwnership(address newOwner) public onlyOwner 
+  restriction(newOwner != address(0)) {
+    ...
+  }
 ```
 
 </script></section>
 
 <section data-markdown><script type="text/template">
 
-## Demo: Counter 
+## Multiple Authorization
+
+* Require more than one account to do an action
+* Can be M of N
+* Owner to set N, M of N to change
+* Danger if several keys are lost
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Ownership
+    
+  * Restricts features of contract to owner
+  * Allows for transfer of ownership
+  * OpenZeppelin code for pattern 
+    
+</script></section>
   
+  <section data-markdown><script type="text/template">
+  
+  ## Roles
+    
+  * Role Based Access Control (RBAC)
+  * Create roles●Assign users to roles
+  * Assign roles to methods
+  * OpenZeppelin implementation
+  </script></section>
+  
+  
+  <section data-markdown><script type="text/template">
+  
+  ## Security
+
+  * Balance Limit
+  * Checks-effects-interaction
+  * Emergency Stop
+  * Mutex
+  * Rate Limit
+  * Secure Transfer
+  * Speed Bump
+    
+  </script></section>
+  
+<section data-markdown><script type="text/template">
+
+## Balance Limit
+
+* Set a lower limit on account balance 
+
 ```
-// SPDX-License-Identifier: MIT
+  uint256 public limit; 
 
-pragma solidity ^0.6.10;
+  function LimitBalance(uint256 value) public {   
+    limit = value; 
+  } 
 
-contract Counter {
-    
-    event ValueChanged(uint indexed oldValue, uint256 indexed newValue);
-    
-    // tracks the number of counts
-    uint256 count = 0;
+  modifier limitedPayable() {   
+    require(this.balance <= limit);   
+    _; 
+  } 
 
-    // Function that increments counter
-    function increment() public {
-        count += 1;
-        emit ValueChanged(count - 1, count);
-    }
-    
-    // Getter function to get the count value
-    function getCount() public view returns (uint256) {
-        return count;
-    }
-}
+  function deposit() public payable limitedPayable {   
+    // some code 
+  }
+```        
+</script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+## Checks-effects-interaction
+
+* Avoid problems with stack and reentrancy   
+
 ```
+  function withdraw(uint amount) public {        
+    require(balances[msg.sender] >= amount);        
+    balances[msg.sender] -= amount;        
+    msg.sender.transfer(amount);    
+  }
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Emergency Stop
+  
+  * Stop or pause transfers
+  * Overcome concerns with immutability
+  * Could be abused
+  
+  </script></section>
+
+<section data-markdown><script type="text/template">
+
+## Mutex
+
+* A way to avoid reentrancy
+
+```
+  mapping(address => bool) mutex;
+
+  modifier preventRecursion() {    
+    if(mutex[msg.sender] == false) {    
+      mutex[msg.sender] = true;    
+      _;    
+      mutex[msg.sender] = false;    
+    }
+  }
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Rate Limit
+
+* Limit how often a function can happen over time
+```
+  uint enabledAt = now; 
+  modifier enabledEvery(uint t) {   
+    if (now >= enabledAt) {     
+      enabledAt = now + t;     
+      _;   
+    } 
+  } 
+  function f() public enabledEvery(1 minutes) {   
+    // some code 
+  }
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+  
+## Secure Transfer
+  
+ * Secure transfer of eth from a contract to an account
+ * Handles errors 
+ * Handles reentrancy 
   
 </script></section>
 
+<section data-markdown><script type="text/template">
+
+## Speed Bump 
+
+* Put in a delay for an action to happen
+* Can put in controls to revert the action
+* 24hr waiting period
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Control 
+
+```
+* Commit and Reveal
+* Guard Check
+* Memory Array Building
+* Oracle
+* Poll
+* Pull Payment
+* Randomness
+* Safemath (Below 0.8.0)
+* State Machine
+* String Equality Comparison
+* Token
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Commit and Reveal
+
+* Commit a hash, then once all hashes are in, reveal actual values and verify with hash
+* Gets around transparency of blockchain 
+
+</script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+  ## Guard Check
+
+  * Validate parameters
+  * Check contract state
+  * Rule out strange conditions 
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Memory Array Building
+
+* Avoid gas fees for retrieving storage
+* Use a view function to get the storage for free
+</script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+  ## Oracle
+  
+  * Get off chain data on chain
+  * Can be used by multiple contracts
+  
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Poll
+
+* Polling or voting
+* Used for group consensus 
+
+</script></section>
+  
+  
+<section data-markdown><script type="text/template">
+
+## Pull Payment
+
+* Recipient asks for payment
+* Contract sends 
+* Good for multiple payments in a transaction
+* Recipient pays gas fee
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Randomness 
+  
+* Generate a random number
+* Avoid predictability
+* Block hash PRNG - the hash of a block as source of randomness
+* Oracle RNG - randomness provided by an oracle, see Oracle pattern
+* Collaborative PRNG - collaborative generation of a random number within the blockchain
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## SafeMath (for Solidity version below 0.8.0) 
+  
+* Avoid overflows
+* ALWAYS USE
+* Also, multiply before you divide
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## State Machine 
+  
+* Ensure contract passes through specific states
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## String Equality Comparison
+  
+* Reduce gas of string comparison
+* If equal length, compare hash
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Token
+  
+* Basic asset transfer control
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Maintenance
+  
+* Automatic Deprecation
+* Contract composer
+* Contract Factory
+* Contract Registry
+* Contract Relay
+* Data Segregation
+* Mortal
+* Satellite
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Mappings
+  
+* Smart contracts are based on two things transfers and shared state
+* Mappings are key/value pairs
+* Mappings in Solidity are assumed infinite
+* The value of a mapping can be a value, another mapping or a structure
+* Tokens use mappings to track the owning accounts
+* Registries use mappings to track who is in the registry
+  
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Mappings
+    
+  ```
+  key1 => Value1
+  .... => .....
+  keyn => Valuen
+  ```
+  ```
+  mapping(key_type => value_type)
+  mapping(address => uint) public balances;
+  balances[msg.sender] = deposit;
+  ```
+    
+  </script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Mappings
+  
+```
+  struct Student {
+    uint age; 
+    string name;
+  }
+  mapping (address => Student) public class;
+  Student memory newStudent;
+  newStudent.age = 21;
+  newStudent.name = “Alice”;
+  class[msg.sender]=newStudent;
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Mappings
+  
+```
+  mapping(address => mapping(uint => bool)) lotterypicks;
+  lotterypicks[msg.sender][2456738992] = true;
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Mappings
+  
+* There is no order to a mapping through solidity
+* You can’t iterate over a mapping
+* There is no syntax like in other languages where you can loop though the contents of a collection
+* You would have to go back to the ledger to see all of the transactions that resulted in entries to the mapping
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Iterators
+  
+* You still need to iterate in some cases
+* Make sure that your case is bounded by a low enough amount that you do not run out of gas
+* If you need to iterate over a larger number of items - don’t use Ethereum
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Arrays
+  
+* Arrays respect order 
+* Arrays have random access
+* Arrays can provide a count
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Arrays
+  
+```
+  uint[] prices;
+  prices.push(55);
+  prices.push(23);
+  uint[5] prices;
+  prices[0] = 55;
+  uint[5] prices = [uint(55), 23, 137, 67, 2];
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Arrays
+  
+```
+  struct Student {
+    uint age; 
+    string name;
+  }
+  Student[ ] public class;
+  Student memory newStudent;
+  newStudent.age = 21;
+  newStudent.name = “Alice”;
+  class.push(newStudent);
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Further Readings
+* [Advances Role Based Access Control](https://hiddentao.com/archives/2020/03/21/advanced-role-based-access-control-in-solidity)
+* [OpenZeppelin Access Control](https://docs.openzeppelin.com/contracts/4.x/api/access)
+* [Protect Smart Contracts from Reentrancy attacks](https://medium.com/coinmonks/protect-your-solidity-smart-contracts-from-reentrancy-attacks-9972c3af7c21)
+* [Blockchain Oracle Problem](https://blog.chain.link/what-is-the-blockchain-oracle-problem/)
+</script></section>
 
 <section data-markdown><script type="text/template">
 
