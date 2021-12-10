@@ -1,0 +1,449 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Blockchain Design Patterns</title>
+
+    <meta name="author" content="Dhruvin Parikh">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="../../../reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="../../../reveal.js/css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../../../reveal.js/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../../../reveal.js/css/print/pdf.css' : '../../../reveal.js/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="../reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <style>
+      .reveal .slides h1, .reveal .slides h2, .reveal .slides h3 {
+        text-transform: none;
+      }
+
+      .two-column {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .two-column em {
+        margin: 20px;
+      }
+
+      .reveal .big-and-bold {
+        font-weight: bold;
+        font-size: 135%;
+      }
+
+      .reveal .shrunk-a-bit {
+        font-size: 90%;
+      }
+
+      .reveal .shrunk-a-bit pre {
+        width: 100%;
+      }
+
+      .reveal pre {
+        width: 100%;
+      }
+
+      .reveal .highlight {
+        color: yellow;
+        font-weight: bold;
+      }
+
+      .reveal .highlightRed {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+<!------------------------------------------------------->
+
+
+
+<section data-markdown><script type="text/template">
+
+## BCDV 1011 - Smart Contracts Development Essentials
+
+### Lesson 1
+
+*Dhruvin Parikh, December 2021*
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## `$WHOAMI`  
+- I am fullstack javascript developer, blockchain developer and an Instructor  
+- CTO and Lead Blockchain Developer at opty.fi
+- Also Blockchain Instructor at York University in Blockchain Development Program 
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Class Plan
+* Smart contracts
+* Ethereum
+* EVM
+* Use cases
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Distributed Network Benefits
+
+* Pseudonymous
+* Democratic
+* Immutable
+* Uncensorable
+* Distributed
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Smart contracts
+
+* Computer programs
+* Created by transactions
+* Have their own ethereum addresses
+* Called "autonomous agents"
+  * After you send them to the blockchain, they exist forever (unless they self destruct)
+  * Anyone can send transactions to them to trigger functionality
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Ethereum
+
+* Ethereum is a decentralized platform designed to run smart contracts
+  * Distributed computer to execute code
+  * Account-based blockchain
+  * Transactions == state transaction function
+* Ethereum has a native asset called ether
+  * Basis of value in the Ethereum ecosystem
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Address
+    
+  - Ethereum addresses are 20 bytes long
+    
+  </script></section>
+  
+  <section data-markdown><script type="text/template">
+  
+  ## Types of Ethereum accounts
+    
+  * Externally Owned Accounts (EOA)
+    * Normal public/private key-pair accounts (previous courses?)
+  * Contracts
+    * Do not have key-pairs
+    * Have "code" written by contract creators
+    * No ability to initiate transactions: can only respond to external events
+  </script></section>
+  
+  
+  <section data-markdown><script type="text/template">
+  
+  ## Externally Owned Accounts (EOA)
+  
+  <img src="eoa.png" width=400>
+  
+  </script></section>
+  
+  <section data-markdown><script type="text/template">
+  
+  ## Contract Accounts
+    
+  <img src="ca.png" width=400>
+      
+  </script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+## Smart contract addresses
+
+* A contract's address is the hash of the creator's address and the nonce of the transaction that created it (RLP encoded)
+  * So, contracts do not have private keys
+* Contracts *do* have nonces
+  * Incremented whenever they deploy children contracts (so children contracts have unique addresses)
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Smart contracts Redefining
+  
+  * Smart Contracts in Ethereum are like autonomous agents that live inside of the Ethereum network
+    * React to external world when "poked" by transactions (which call specific functions)
+    * Have direct control over:
+      * internal ether balance
+      * internal contract state
+  
+  </script></section>
+
+  <section data-markdown><script type="text/template">
+
+  ## Smart contracts Purpose
+  
+* Store and maintain data
+  * Data represents something useful to users or other contracts
+  * Ex: a token currency or organization’s membership
+* Manage contract or relationship between untrusting users
+  * Ex: financial contracts, insurance
+* Provide functions to other contracts
+  * Serving as a software library
+* Complex Authentication
+  
+  
+  </script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Ethereum
+  
+  * Ethereum is a “distributed computer”
+  * Ethereum’s distributed consensus protocol is Proof-of-Work
+  * Network consensus removes the need for Trusted Third Party
+  * Secure Peer-to-Peer agreements that live on the blockchain forever
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+  
+  ## Ethereum Virtual Machine
+  
+  <img src="EVM_architecture.png" width=600>
+  
+  </script></section>
+
+  <section data-markdown><script type="text/template">
+  
+  ## EVM 
+  
+  * Gas and Fees
+  * Accounts
+  * Transactions
+  * Storage, memory and stack
+  * Instruction Sets
+  * Message Calls
+  * Delegate/callcode & libraries
+  * Logs
+  * Create
+  * Deactivate and self-destruct 
+  </script></section>
+
+<section data-markdown><script type="text/template">
+
+  ## Use cases 
+  
+  * ERC Tokens
+  * DNS e.g. ENS
+  * DeFi
+  * Predictions Markets
+  * DAO
+  * Marketplaces
+  </script></section>
+
+<section data-markdown><script type="text/template">
+
+## Solidity
+
+* A programming language, like C++ or Python or Javascript
+* But designed specially for smart contracts
+* Compiles to a special machine called the Ethereum Virtual Machine (EVM) 
+
+</script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+<img src="Solidity-Compilation.png" style="width:500px;background-color: white" />
+
+</script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+## Structure
+
+```
+    // SPDX-License-Identifier: MIT
+    pragma solidity ^0.7.1;
+    contract MyContractName {
+        // code goes here
+    }
+```
+
+* `pragma` line: What version of solidity you want
+  * We'll leave this out of examples, but you should always have it in your code
+  * Use at least `0.7.1`: This course does not cover security issues of earlier versions
+* `contract`: Everything inside the curly braces is your contract
+
+</script></section>
+
+
+
+<section data-markdown><script type="text/template">
+
+  ## Primitive types
+  
+  * **uintX**: `X` is the number of bits: `uint256`, `uint32`
+  * **intX**: Same as `uintX` except signed (negatives allowed): `int256`, `int64`
+  * **bytesX**: Fixed size collection of bytes: `bytes32`
+  * **address**: An Ethereum address (20 bytes)
+  * **bool**: Boolean: `true` or `false`
+  * **string**: Dynamic-size collection of characters
+  * **bytes**: Dynamic-size collection of bytes
+  
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Math Operations
+
+- Arithmetic Operators - +,-,\*,/,%, **
+* Incremental Operators - ++, --
+* Bitwise Operators - | , ~ , >> , <<
+* Logical Operators - !, &&, ||, ==, !=
+
+</script></section>
+  
+  
+<section data-markdown><script type="text/template">
+
+## Example
+
+```
+contract operators {
+  // Arithmetic Operators
+  // +,-,*,/, %, **
+  // Incremental Operators
+  // a++, a--, a+=1, a=a+1,++a,--a;
+  uint a=10;
+  a= a++; //here, output will be 10, because the value is first       
+         // returned and then then increment is done
+  a=++a;
+  //Logical Operators
+  // !, &&, ||, ==, !=
+  isOwner = true && false;
+  uint orValue= 0x02 | 0x01; // output would be 0x03
+
+  function Operators() {
+    // Initialize state variables here
+  }
+}
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Demo: Counter 
+  
+```
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.10;
+
+contract Counter {
+    
+    event ValueChanged(uint indexed oldValue, uint256 indexed newValue);
+    
+    // tracks the number of counts
+    uint256 count = 0;
+
+    // Function that increments counter
+    function increment() public {
+        count += 1;
+        emit ValueChanged(count - 1, count);
+    }
+    
+    // Getter function to get the count value
+    function getCount() public view returns (uint256) {
+        return count;
+    }
+}
+```
+  
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## End of Class
+
+</script></section>
+
+
+<!------------------------------------------------------->
+
+
+      </div>
+
+    </div>
+
+    <script src="../../../reveal.js/lib/js/head.min.js"></script>
+    <script src="../../../reveal.js/js/reveal.js"></script>
+    <script src="../../../reveal.js/plugin/zoom-js/zoom.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+
+	math: {
+          mathjax: '../../../lib/MathJax/MathJax.js',
+          config: 'TeX-AMS_SVG-full',
+	},
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: '../../../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../../../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../../../reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '../../../reveal.js/plugin/math/math.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
