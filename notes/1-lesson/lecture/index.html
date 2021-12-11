@@ -167,7 +167,8 @@
   ## Roles
     
   * Role Based Access Control (RBAC)
-  * Create roles●Assign users to roles
+  * Create roles
+  * Assign users to roles
   * Assign roles to methods
   * OpenZeppelin implementation
   </script></section>
@@ -266,8 +267,8 @@
 ```
   uint enabledAt = now; 
   modifier enabledEvery(uint t) {   
-    if (now >= enabledAt) {     
-      enabledAt = now + t;     
+    if (block.timestamp >= enabledAt) {     
+      enabledAt = blok.timestamp + t;     
       _;   
     } 
   } 
@@ -295,6 +296,12 @@
 * Put in a delay for an action to happen
 * Can put in controls to revert the action
 * 24hr waiting period
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## 15 minute break 
+
 </script></section>
 
 <section data-markdown><script type="text/template">
@@ -556,6 +563,230 @@
   newStudent.age = 21;
   newStudent.name = “Alice”;
   class.push(newStudent);
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Iterators
+  
+* Walk through each element of a collection
+* Used for searching for matching a condition
+* Apply a function to all or some entries of a collection
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Data Structures
+  
+* Simple List Using Array : Strengths
+  * Reliably chronological order
+  * Provides a count
+  * Random access by Row Number (not Id)
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Data Structures
+  
+* Simple List Using Array : Weakness
+  * random access by Id
+  * No assurance of uniqueness
+  * No check for duplicates
+  * Uncontrolled growth of the list
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Data Structures
+  
+```
+contract simpleList {  
+  struct EntityStruct {    
+    address entityAddress;    
+    uint entityData;  
+  }  
+  EntityStruct[] public entityStructs;  
+  
+  function newEntity(address entityAddress, uint entityData) public returns(uint rowNumber) {    
+    EntityStruct memory newEntity;    
+    newEntity.entityAddress = entityAddress;    
+    newEntity.entityData    = entityData;    
+    return entityStructs.push(newEntity)-1;  
+  }  
+  
+  function getEntityCount() public constant returns(uint entityCount) {    
+    return entityStructs.length;  
+  }
+}
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Data Structures : Strengths
+
+* Random access by unique Id 
+* Assurance of Id Uniqueness
+* Enclose arrays, mappings, structs within each "record"
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Data Structures : Mapping with Struct
+
+* Unable to enumerate the keys
+* Unable to count the keys
+* Needs a manual check to distinguish a default from an explicitly "all 0" record
+</script></section>
+
+<section data-markdown><script type="text/template">
+
+## Data Structures
+
+```
+contract mappingWithStruct {  
+  struct EntityStruct {    
+    uint entityData;    
+    bool isEntity;  
+  }  
+  mapping (address => EntityStruct) public entityStructs;  
+  
+  function isEntity(address entityAddress) public constant returns(bool isIndeed) {    
+    return entityStructs[entityAddress].isEntity;  
+  }  
+  
+  function newEntity(address entityAddress, uint entityData) public returns(bool success) {    
+    if(isEntity(entityAddress)) revert();     
+    entityStructs[entityAddress].entityData = entityData;    
+    entityStructs[entityAddress].isEntity = true;    
+    return true;  
+  }
+  function deleteEntity(address entityAddress) public returns(bool success) {    
+    if(!isEntity(entityAddress)) revert();    
+    entityStructs[entityAddress].isEntity = false;    
+    return true;  
+  }  
+  
+  function updateEntity(address entityAddress, uint entityData) public returns(bool success) {    
+    if(!isEntity(entityAddress)) revert();    
+    entityStructs[entityAddress].entityData = entityData;    
+    return true;  
+  }
+}
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Data Structures : Array of Struct with Unique Ids : Strengths
+* Random access by Row number
+* Assurance of Id uniqueness
+* Enclose arrays, mappings and structs with each "record"
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Data Structures : Mapping with Struct : Weaknesses
+* No random access by Id
+* Uncontrolled growth of the list
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Data Structures
+```
+contract arrayWithUniqueIds {  
+  struct EntityStruct {    
+    address entityAddress;    
+    uint entityData;  
+  }  
+  EntityStruct[] public entityStructs;  
+  mapping(address => bool) knownEntity;  
+  
+  function isEntity(address entityAddress) public constant returns(bool isIndeed) {    
+    return knownEntity[entityAddress];  
+  }  
+  
+  function getEntityCount() public constant returns(uint entityCount) {    
+    return entityStructs.length;  
+  }
+
+  function newEntity(address entityAddress, uint entityData) public returns(uint rowNumber) {    
+    if(isEntity(entityAddress)) revert();    
+    EntityStruct memory newEntity;    
+    newEntity.entityAddress = entityAddress;    
+    newEntity.entityData = entityData;    
+    knownEntity[entityAddress] = true;    
+    return entityStructs.push(newEntity) - 1;  
+  }  
+  
+  function updateEntity(uint rowNumber, address entityAddress, uint entityData) public returns(bool success) {    
+    if(!isEntity(entityAddress)) revert();    
+    if(entityStructs[rowNumber].entityAddress != entityAddress) revert();    
+    entityStructs[rowNumber].entityData = entityData;    
+    return true;  
+  }
+}
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Mapped Structs with Index : Strength
+* Random access by unique Id or row number
+* Assurance of Id uniqueness●Enclose arrays, mappings and structs within each "record"
+* List maintains order of declaration●Count the records
+* Enumerate the Ids
+* "Soft" delete an item by setting a boolean
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Mapped Structs with Index : Weaknesses
+* Uncontrolled growth of the list
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+
+## Data Structures
+```
+contract MappedStructsWithIndex {  
+  struct EntityStruct {    
+    uint entityData;    
+    bool isEntity;  
+  }  
+  mapping(address => EntityStruct) public entityStructs;  
+  address[] public entityList;  
+  
+  function isEntity(address entityAddress) public constant returns(bool isIndeed) {      
+    return entityStructs[entityAddress].isEntity;  
+  }  
+  
+  function getEntityCount() public constant returns(uint entityCount) {    
+    return entityList.length;  
+  }
+
+  function newEntity(address entityAddress, uint entityData) public returns(uint rowNumber) {    
+    if(isEntity(entityAddress)) revert();    
+    entityStructs[entityAddress].entityData = entityData;    
+    entityStructs[entityAddress].isEntity = true;    
+    return entityList.push(entityAddress) - 1;  
+  }  
+  
+  function updateEntity(address entityAddress, uint entityData) public returns(bool success) {    
+    if(!isEntity(entityAddress)) revert();    
+    entityStructs[entityAddress].entityData    = entityData;    
+    return true;  
+  }
+}
 ```
 </script></section>
 
