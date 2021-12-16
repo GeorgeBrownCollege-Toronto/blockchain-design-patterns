@@ -70,7 +70,10 @@ for await (const result of ipfs.add(this.state.buffer)) {
 
 ### Submission Requirements
 
-* Write a NextJS / ReactJS app that can take an image file and it to IPFS
-* Display the file in the app
+* Write a NextJS / ReactJS app that can take an image file and add it to IPFS
+* Retrieve the above uploaded image from IPFS and render the same in the app.
+> Example of rendering image pinned to IPFS
+>`<img src="https://cloudflare-ipfs.com/ipfs/QmY4x4vqe28hFypVjhWFBoo9NHWANPG8UG9aPSVPKvbiYs">`
+
 * Commit the changes to **private** GitHub repository and give a read-only access to [@dhruvinparikh](https://github.com/dhruvinparikh)
 * Submit the repository URL to the BB
