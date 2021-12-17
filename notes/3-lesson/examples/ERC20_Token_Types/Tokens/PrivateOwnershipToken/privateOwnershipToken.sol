@@ -36,7 +36,7 @@ contract PrivateOwnershipToken is StandardToken, Ownable {
      /**
      * @dev transfer function to tansfer tokens
      **/
-    function transfer(address _to, uint256 _value) public tokensOwnable returns (bool) {
+    function transfer(address _to, uint256 _value) public override tokensOwnable returns (bool) {
         require(canOwnTokens[_to] == true);
         return super.transfer(_to, _value);
     }

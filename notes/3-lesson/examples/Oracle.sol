@@ -24,8 +24,8 @@ contract Oracle {
 
 
 contract OracleUser {
-    Oracle constant private ORACLE_CONST = Oracle(address(0x00000000219ab540356cBB839Cbe05303d7705Fa)); // known contract
-    uint private exchangeRate;
+    Oracle constant private ORACLE_CONST = Oracle(address(0xd9145CCE52D386f254917e481eB44e9943F39138)); // known contract
+    uint public exchangeRate;
 
     function buySomething() public {
         ORACLE_CONST.query("USD", this.oracleResponse);

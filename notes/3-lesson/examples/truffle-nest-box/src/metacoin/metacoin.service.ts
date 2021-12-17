@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Contract } from 'ethers';
+import { Contract, Signer } from 'ethers';
 import { ConfigService } from '@nestjs/config';
 import { ConnectionService } from '../connection/connection.service';
 import * as MetaCoin from '../../build/contracts/MetaCoin.json';
@@ -9,7 +9,7 @@ export class MetacoinService {
   private metacoinContract: Contract;
 
   constructor(private readonly connectionService: ConnectionService,
-              private readonly configService: ConfigService) {
+    private readonly configService: ConfigService) {
     this.metacoinContract = this.getMetacoinContract();
   }
 
@@ -29,6 +29,12 @@ export class MetacoinService {
       .catch(() => {
         throw new Error('Unable to send signed transaction');
       });
+  }
+
+  sendCoin(to: string, amount: string): Promise<void> {
+    return this.metacoinContract.connect(this.connectionService.getSigner()).sendCoin(to, amount).catch((error) => {
+      throw error
+    })
   }
 
   private getMetacoinContract(): Contract {

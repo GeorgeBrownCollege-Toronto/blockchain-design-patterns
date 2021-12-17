@@ -41,7 +41,7 @@ contract WhiteList is StandardToken, Ownable {
   /**
      * @dev Prevent non-WhiteList address from transfering
      **/
-    function transfer(address _to, uint256 _value) public returns (bool) {
+    function transfer(address _to, uint256 _value) public override returns (bool) {
         require(tokenWhiteList[msg.sender] == true);
         return super.transfer(_to, _value);
     }

@@ -17,7 +17,7 @@ contract BasicToken is ERC20Basic {
   /**
   * @dev total number of tokens in existence
   */
-  function totalSupply() public view returns (uint256) {
+  function totalSupply() public view override returns (uint256) {
     return totalSupply_;
   }
 
@@ -26,7 +26,7 @@ contract BasicToken is ERC20Basic {
   * @param _to The address to transfer to.
   * @param _value The amount to be transferred.
   */
-  function transfer(address _to, uint256 _value) public returns (bool) {
+  function transfer(address _to, uint256 _value) public override returns (bool) {
     require(_to != address(0));
     require(_value <= balances[msg.sender]);
 
@@ -41,7 +41,7 @@ contract BasicToken is ERC20Basic {
   * @param _owner The address to query the the balance of.
   * @return An uint256 representing the amount owned by the passed address.
   */
-  function balanceOf(address _owner) public view returns (uint256) {
+  function balanceOf(address _owner) public view override returns (uint256) {
     return balances[_owner];
   }
 

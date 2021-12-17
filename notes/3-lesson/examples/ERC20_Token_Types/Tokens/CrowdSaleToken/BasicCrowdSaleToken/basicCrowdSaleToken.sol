@@ -56,7 +56,7 @@ contract CrowdsaleToken is StandardToken, Configurable, Ownable {
         
         uint256 weiAmount = msg.value; // Calculate tokens to sell
         uint256 tokens = (weiAmount * basePrice) / (1 ether);
-        uint256 returnWei = 0;
+        uint256 returnWei;
         
         if((tokensSold + tokens) > cap){
             uint256 newTokens = cap - tokensSold;

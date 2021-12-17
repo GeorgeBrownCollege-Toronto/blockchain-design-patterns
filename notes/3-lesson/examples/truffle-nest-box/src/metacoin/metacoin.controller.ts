@@ -9,12 +9,17 @@ export class MetacoinController {
 
   @Get('balance/:address')
   getBalance(@Param('address', IsAddressPipe) address: string,
-             @Query('eth') eth?: boolean): Promise<string> {
+    @Query('eth') eth?: boolean): Promise<string> {
     return this.metacoinService.getBalance(address, eth);
   }
 
   @Post('send-coin')
-  sendCoin(@Body() signedTransfer: SignedTransferDto): Promise<void> {
+  sendCoin(@Body() params: { to: string, amount: string }): Promise<void> {
+    return this.metacoinService.sendCoin(params.to, params.amount)
+  }
+
+  @Post('send-coin-tx')
+  sendCoinTx(@Body() signedTransfer: SignedTransferDto): Promise<void> {
     return this.metacoinService.sendSignedTransaction(signedTransfer.tx);
   }
 }
